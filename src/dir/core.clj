@@ -8,10 +8,10 @@
   (file-seq (directory dir)))
 
 (defn -main
-  [& dir]
-  (let [dir (or (first dir) ".")]
+  [& args]
+  (let [dir (or (first args) ".") pattern (or (second args) ".*")]
     (printf "dir=%s\n" dir)
-    (doseq [file (files dir)]
+    (doseq [file (filter #(re-find (re-pattern pattern) (.getPath %)) (files dir))]
       (if (.isDirectory file)
         (print " <DIR> ")
         (print "       "))
